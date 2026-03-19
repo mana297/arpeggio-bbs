@@ -12,14 +12,12 @@
     .app{width:100%;max-width:980px;height:100dvh;background:#080c08;display:flex;flex-direction:column;overflow:hidden}
     .scanline{position:fixed;top:0;left:0;right:0;bottom:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.04) 2px,rgba(0,0,0,0.04) 4px);pointer-events:none;z-index:200}
 
-    /* HEADER */
     .hdr{background:#060b06;border-bottom:1px solid #1a2e1a;padding:10px 18px;display:flex;align-items:center;gap:12px;flex-shrink:0}
     .hdr-logo{font-family:'VT323',monospace;font-size:26px;color:#6dbd6d;letter-spacing:5px}
     .hdr-sub{font-size:9px;color:#2a4a2a;letter-spacing:2px}
     .hdr-right{margin-left:auto;display:flex;align-items:center;gap:10px}
     .dot{width:7px;height:7px;border-radius:50%;background:#4a9a4a;box-shadow:0 0 7px #4a9a4a;animation:blink 2s infinite;display:none}
     .me-badge{font-size:10px;color:#4a7a4a;letter-spacing:1px;display:none}
-    /* メンバーリスト開閉ボタン（スマホ用） */
     .members-toggle{background:transparent;border:1px solid #2a4a2a;color:#4a7a4a;font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1px;padding:4px 8px;cursor:pointer;display:none;transition:all .2s}
     .members-toggle:hover{color:#6dbd6d;border-color:#4a7a4a}
     @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
@@ -27,7 +25,7 @@
     .screen{display:none;flex:1;min-height:0}
     .screen.on{display:flex}
 
-    /* ===== PASSWORD ===== */
+    /* PASSWORD */
     #pw{flex-direction:column;align-items:center;justify-content:center;gap:22px;padding:40px 20px;overflow-y:auto}
     .pw-logo{font-family:'VT323',monospace;font-size:62px;color:#5aaa5a;letter-spacing:10px;text-shadow:0 0 28px rgba(90,170,90,.22)}
     .pw-desc{font-size:11px;color:#2a4a2a;letter-spacing:2px;text-align:center;line-height:2}
@@ -38,26 +36,23 @@
     .iw input{flex:1;padding-right:44px}
     .eye{position:absolute;right:0;width:40px;height:100%;background:transparent;border:none;color:#2a5a2a;cursor:pointer;font-family:'Share Tech Mono',monospace;font-size:10px;display:flex;align-items:center;justify-content:center;transition:color .2s}
     .eye:hover{color:#6dbd6d}
-    input[type=password],input[type=text]{width:100%;background:#0a120a;border:1px solid #1a3a1a;color:#7dbd7d;font-family:'Share Tech Mono',monospace;font-size:14px;padding:9px 13px;outline:none;transition:border-color .2s}
-    input[type=password]{letter-spacing:5px}
-    input.nick{letter-spacing:1px}
-    input:focus{border-color:#3a7a3a}
+    input[type=password],input[type=text],textarea{font-family:'Share Tech Mono',monospace;outline:none;transition:border-color .2s}
+    .pw-form input[type=password],.pw-form input[type=text]{width:100%;background:#0a120a;border:1px solid #1a3a1a;color:#7dbd7d;font-size:14px;padding:9px 13px}
+    .pw-form input[type=password]{letter-spacing:5px}
+    .pw-form input.nick{letter-spacing:1px}
+    .pw-form input:focus{border-color:#3a7a3a}
+    .saved-hint{font-size:10px;color:#3a6a3a;letter-spacing:1px}
     .sep{border:none;border-top:1px solid #152515;margin:2px 0}
     .err{font-size:11px;color:#7a3030;letter-spacing:2px;min-height:15px;text-align:center}
     .btn-enter{width:100%;background:transparent;border:1px solid #2a5a2a;color:#6dbd6d;font-family:'Share Tech Mono',monospace;font-size:13px;letter-spacing:4px;padding:10px;cursor:pointer;transition:all .2s}
     .btn-enter:hover{background:#0d1a0d;border-color:#4a8a4a}
 
-    /* ===== MAIN LAYOUT ===== */
+    /* MAIN */
     #main{flex-direction:row}
-
-    /* 左：チャット＋掲示板 */
     .main-left{display:flex;flex-direction:column;flex:1;min-width:0;min-height:0}
-
-    /* 右：メンバーリスト */
     .members-panel{width:180px;flex-shrink:0;border-left:1px solid #1a2e1a;background:#060b06;display:flex;flex-direction:column;transition:all .2s}
-    .members-panel.hidden{display:none}
     .members-hdr{padding:10px 12px;border-bottom:1px solid #1a2e1a;font-size:10px;color:#2a4a2a;letter-spacing:3px;display:flex;align-items:center;gap:6px;flex-shrink:0}
-    .online-badge{background:#0d1a0d;border:1px solid #1a3a1a;color:#4a9a4a;font-size:10px;padding:1px 7px;border-radius:0;margin-left:auto}
+    .online-badge{background:#0d1a0d;border:1px solid #1a3a1a;color:#4a9a4a;font-size:10px;padding:1px 7px;margin-left:auto}
     .members-list{flex:1;overflow-y:auto;padding:8px;display:flex;flex-direction:column;gap:4px;scrollbar-width:thin;scrollbar-color:#1a3a1a #060b06}
     .member-row{display:flex;align-items:center;gap:8px;padding:5px 6px;border:1px solid transparent;transition:all .15s;animation:pop .2s ease}
     .member-row:hover{border-color:#1a3a1a;background:#0a120a}
@@ -66,7 +61,6 @@
     .member-name.is-me{color:#6dbd6d}
     .member-dot{width:5px;height:5px;border-radius:50%;background:#3a8a3a;margin-left:auto;flex-shrink:0}
 
-    /* TABS */
     .tabs{display:flex;border-bottom:1px solid #1a2e1a;background:#060b06;flex-shrink:0}
     .tab{flex:1;padding:8px;font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:3px;color:#2a4a2a;background:transparent;border:none;cursor:pointer;transition:all .2s;border-bottom:2px solid transparent}
     .tab.active{color:#6dbd6d;border-bottom-color:#4a8a4a}
@@ -88,8 +82,17 @@
     .msg-time{font-size:10px;color:#1e3e1e;flex-shrink:0}
     .msg-body{font-size:13px;color:#7aaa7a;line-height:1.5;word-break:break-word}
     .msg-body.sys{color:#2a4a5a;font-size:11px;font-style:italic}
+
+    /* 日付区切り */
+    .date-sep{display:flex;align-items:center;gap:10px;padding:6px 0;margin:4px 0}
+    .date-sep-line{flex:1;border-top:1px solid #1a2a1a}
+    .date-sep-text{font-size:10px;color:#1e3e2e;letter-spacing:2px;white-space:nowrap}
+
+    /* 入退室通知 */
+    .notice{font-size:11px;color:#1e4a2e;letter-spacing:1px;padding:2px 0 2px 36px;font-style:italic;animation:pop .2s ease}
+
     .chat-bar{border-top:1px solid #1a2e1a;padding:9px 14px;display:flex;gap:8px;background:#060b06;flex-shrink:0}
-    .ci{flex:1;background:#0a120a;border:1px solid #1a3a1a;color:#8ab88a;font-family:'Share Tech Mono',monospace;font-size:13px;padding:8px 11px;outline:none;min-width:0}
+    .ci{flex:1;background:#0a120a;border:1px solid #1a3a1a;color:#8ab88a;font-size:13px;padding:8px 11px;min-width:0}
     .ci:focus{border-color:#3a6a3a}
     .btn-send{background:transparent;border:1px solid #2a5a2a;color:#6dbd6d;font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:2px;padding:8px 14px;cursor:pointer;flex-shrink:0;transition:all .15s}
     .btn-send:hover{background:#0d1a0d}
@@ -106,15 +109,14 @@
     .post-title{font-size:13px;color:#8aba8a;margin-bottom:5px;word-break:break-word}
     .post-body{font-size:12px;color:#5a8a5a;line-height:1.6;word-break:break-word}
     .bbs-form{border-top:1px solid #1a2e1a;padding:10px 14px;background:#060b06;display:flex;flex-direction:column;gap:7px;flex-shrink:0}
-    .bbs-title-input{width:100%;background:#0a120a;border:1px solid #1a3a1a;color:#8ab88a;font-family:'Share Tech Mono',monospace;font-size:12px;padding:7px 11px;outline:none}
-    .bbs-title-input:focus{border-color:#3a6a3a}
+    .bbs-ti{width:100%;background:#0a120a;border:1px solid #1a3a1a;color:#8ab88a;font-size:12px;padding:7px 11px}
+    .bbs-ti:focus{border-color:#3a6a3a}
     .bbs-row{display:flex;gap:8px}
-    .bbs-body-input{flex:1;background:#0a120a;border:1px solid #1a3a1a;color:#8ab88a;font-family:'Share Tech Mono',monospace;font-size:12px;padding:7px 11px;outline:none;resize:none;min-width:0;height:60px}
-    .bbs-body-input:focus{border-color:#3a6a3a}
+    .bbs-bi{flex:1;background:#0a120a;border:1px solid #1a3a1a;color:#8ab88a;font-size:12px;padding:7px 11px;resize:none;min-width:0;height:60px}
+    .bbs-bi:focus{border-color:#3a6a3a}
     .btn-post{background:transparent;border:1px solid #2a5a2a;color:#6dbd6d;font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:1px;padding:8px 14px;cursor:pointer;flex-shrink:0;align-self:flex-end;transition:all .15s}
     .btn-post:hover{background:#0d1a0d}
 
-    /* アバターカラー */
     .av0{background:#0d1a16;border-color:#1a4a3a;color:#4a9a7a}
     .av1{background:#0d130d;border-color:#1a4a1a;color:#4a9a4a}
     .av2{background:#0d1520;border-color:#1a3a5a;color:#4a7aaa}
@@ -123,11 +125,9 @@
     .av5{background:#1a0d10;border-color:#4a1a2a;color:#9a4a5a}
     .sys-av{background:#0d1215;border-color:#1a2a35;color:#3a6a7a}
 
-    /* スマホ */
     @media(max-width:600px){
-      .members-panel{position:fixed;top:0;right:0;bottom:0;z-index:150;width:160px;transform:translateX(100%);transition:transform .25s}
-      .members-panel.open{transform:translateX(0);display:flex}
-      .members-panel.hidden{display:flex;transform:translateX(100%)}
+      .members-panel{position:fixed;top:0;right:0;bottom:0;z-index:150;width:160px;transform:translateX(100%);transition:transform .25s;display:flex}
+      .members-panel.open{transform:translateX(0)}
       .members-toggle{display:block}
       .pw-logo{font-size:48px;letter-spacing:6px}
     }
@@ -162,6 +162,7 @@
       <hr class="sep"/>
       <div class="lbl">&gt; NICKNAME <small>( OPTIONAL )</small></div>
       <input type="text" class="nick" id="nickIn" placeholder="未設定の場合は自動割り当て" maxlength="20" autocomplete="off"/>
+      <div class="saved-hint" id="savedHint"></div>
       <div class="err" id="errMsg"></div>
       <button class="btn-enter" id="enterBtn">[ ENTER ]</button>
     </div>
@@ -169,14 +170,11 @@
 
   <!-- MAIN -->
   <div class="screen" id="main">
-
-    <!-- 左：コンテンツ -->
     <div class="main-left">
       <div class="tabs">
         <button class="tab active" data-pane="chat">CHAT</button>
         <button class="tab" data-pane="bbs">BOARD</button>
       </div>
-
       <div class="pane on" id="chat">
         <div class="chat-msgs" id="chatMsgs"></div>
         <div class="chat-bar">
@@ -184,34 +182,28 @@
           <button class="btn-send" id="sendBtn">SEND</button>
         </div>
       </div>
-
       <div class="pane" id="bbs">
         <div class="bbs-posts" id="bbsPosts"></div>
         <div class="bbs-form">
-          <input class="bbs-title-input" type="text" id="postTitle" placeholder="タイトルを入力..." maxlength="60"/>
+          <input class="bbs-ti" type="text" id="postTitle" placeholder="タイトルを入力..." maxlength="60"/>
           <div class="bbs-row">
-            <textarea class="bbs-body-input" id="postBody" placeholder="本文を入力... (Ctrl+Enterで投稿)" maxlength="500"></textarea>
+            <textarea class="bbs-bi" id="postBody" placeholder="本文を入力... (Ctrl+Enterで投稿)" maxlength="500"></textarea>
             <button class="btn-post" id="postBtn">POST</button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 右：メンバーリスト -->
     <div class="members-panel" id="membersPanel">
-      <div class="members-hdr">
-        MEMBERS
-        <span class="online-badge" id="onlineBadge">0</span>
-      </div>
+      <div class="members-hdr">MEMBERS<span class="online-badge" id="onlineBadge">0</span></div>
       <div class="members-list" id="membersList"></div>
     </div>
-
   </div>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, push, onValue, serverTimestamp, onDisconnect, set }
+import { getDatabase, ref, push, onValue, serverTimestamp, onDisconnect, set, get }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
 const cfg = {
@@ -228,12 +220,27 @@ const db = getDatabase(initializeApp(cfg));
 const adj  = ['Silent','Shadow','Phantom','Hollow','Neon','Crimson','Azure','Void','Static','Binary'];
 const noun = ['Walker','Ghost','Drifter','Signal','Echo','Cipher','Specter','Node','Relay','Pulse'];
 function randId(){ return adj[Math.floor(Math.random()*adj.length)]+noun[Math.floor(Math.random()*noun.length)]+'_'+(Math.floor(Math.random()*900)+100); }
-
 function avClass(name){ if(!name) return 'sys-av'; let h=0; for(let c of name) h=(h*31+c.charCodeAt(0))&0xffff; return 'av'+(h%6); }
 function avText(name){ return name?name.slice(0,2).toUpperCase():'SY'; }
-function fmt(){ const d=new Date(); return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'); }
+
+function fmt(ts){
+  const d=ts?new Date(ts):new Date();
+  return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+}
+function dateLabel(ts){
+  const d=ts?new Date(ts):new Date();
+  return d.getFullYear()+'/'+(d.getMonth()+1).toString().padStart(2,'0')+'/'+d.getDate().toString().padStart(2,'0');
+}
 
 let myName='';
+
+// ── 名前の保存・読み込み ──
+const SAVED_KEY='arpeggio_nickname';
+const savedName=localStorage.getItem(SAVED_KEY);
+if(savedName){
+  document.getElementById('nickIn').value=savedName;
+  document.getElementById('savedHint').textContent='// 前回の名前: '+savedName;
+}
 
 function mkAv(name,cls='avatar'){
   const el=document.createElement('div');
@@ -242,8 +249,25 @@ function mkAv(name,cls='avatar'){
   return el;
 }
 
-function addChat(name,text,isMe,isSys){
+// ── チャットメッセージ描画 ──
+let lastDateLabel='';
+function addChat(name,text,isMe,isSys,ts){
   const msgs=document.getElementById('chatMsgs');
+
+  // 日付区切り
+  if(!isSys){
+    const dl=dateLabel(ts);
+    if(dl!==lastDateLabel){
+      lastDateLabel=dl;
+      const sep=document.createElement('div'); sep.className='date-sep';
+      const l1=document.createElement('div'); l1.className='date-sep-line';
+      const l2=document.createElement('div'); l2.className='date-sep-line';
+      const tx=document.createElement('div'); tx.className='date-sep-text'; tx.textContent=dl;
+      sep.appendChild(l1); sep.appendChild(tx); sep.appendChild(l2);
+      msgs.appendChild(sep);
+    }
+  }
+
   const row=document.createElement('div'); row.className='msg';
   const av=document.createElement('div');
   av.className='avatar '+(isSys?'sys-av':avClass(name));
@@ -251,7 +275,7 @@ function addChat(name,text,isMe,isSys){
   const meta=document.createElement('div'); meta.className='msg-meta';
   const top=document.createElement('div'); top.className='msg-top';
   const nm=document.createElement('div'); nm.className='msg-name '+(isSys?'sys':isMe?'me':'other'); nm.textContent=isSys?'SYSTEM':name;
-  const tm=document.createElement('div'); tm.className='msg-time'; tm.textContent=fmt();
+  const tm=document.createElement('div'); tm.className='msg-time'; tm.textContent=fmt(ts);
   top.appendChild(nm); top.appendChild(tm);
   const bd=document.createElement('div'); bd.className='msg-body'+(isSys?' sys':''); bd.textContent=text;
   meta.appendChild(top); meta.appendChild(bd);
@@ -260,6 +284,14 @@ function addChat(name,text,isMe,isSys){
   msgs.scrollTop=msgs.scrollHeight;
 }
 
+function addNotice(text){
+  const msgs=document.getElementById('chatMsgs');
+  const el=document.createElement('div'); el.className='notice'; el.textContent=text;
+  msgs.appendChild(el);
+  msgs.scrollTop=msgs.scrollHeight;
+}
+
+// ── 掲示板投稿描画 ──
 function renderPost(data){
   const isMe=data.author===myName;
   const card=document.createElement('div'); card.className='post-card';
@@ -270,29 +302,42 @@ function renderPost(data){
   const pd=document.createElement('div'); pd.className='post-date'; pd.textContent=data.dateStr||'';
   pmeta.appendChild(pa); pmeta.appendChild(pd);
   hdr.appendChild(av); hdr.appendChild(pmeta);
-  const title=document.createElement('div'); title.className='post-title'; title.textContent=data.title;
-  const body=document.createElement('div'); body.className='post-body'; body.textContent=data.body;
-  card.appendChild(hdr); card.appendChild(title); if(data.body) card.appendChild(body);
+  const title=document.createElement('div'); title.className='post-title'; title.textContent=data.title||'';
+  card.appendChild(hdr); card.appendChild(title);
+  if(data.body){
+    const body=document.createElement('div'); body.className='post-body'; body.textContent=data.body;
+    card.appendChild(body);
+  }
   return card;
 }
 
 // ── メンバーリスト更新 ──
+let prevMembers={};
 function updateMembers(snap){
   const list=document.getElementById('membersList');
   list.innerHTML='';
-  if(!snap.exists()){ document.getElementById('onlineBadge').textContent='0'; return; }
-  const members=snap.val();
+  const members=snap.exists()?snap.val():{};
   const keys=Object.keys(members);
   document.getElementById('onlineBadge').textContent=keys.length;
   document.getElementById('hdrSub').textContent='ANONYMOUS COMMUNITY  |  ONLINE: '+keys.length;
 
-  // 自分を先頭に
-  keys.sort((a,b)=>{
-    if(members[a].name===myName) return -1;
-    if(members[b].name===myName) return 1;
-    return 0;
-  });
+  // 入退室検出
+  if(myName){
+    keys.forEach(k=>{
+      const name=members[k].name;
+      if(name && name!==myName && !Object.values(prevMembers).find(m=>m.name===name)){
+        addNotice('// '+name+' が入室しました');
+      }
+    });
+    Object.values(prevMembers).forEach(m=>{
+      if(m.name && m.name!==myName && !keys.find(k=>members[k].name===m.name)){
+        addNotice('// '+m.name+' が退出しました');
+      }
+    });
+  }
+  prevMembers=members;
 
+  keys.sort((a,b)=>{ if(members[a].name===myName) return -1; if(members[b].name===myName) return 1; return 0; });
   keys.forEach(k=>{
     const name=members[k].name||'?';
     const isMe=name===myName;
@@ -318,14 +363,8 @@ document.querySelectorAll('.tab').forEach(t=>{
 // ── スマホ：メンバーリスト開閉 ──
 const membersToggle=document.getElementById('membersToggle');
 const membersPanel=document.getElementById('membersPanel');
-membersToggle.addEventListener('click',()=>{
-  membersPanel.classList.toggle('open');
-});
-document.addEventListener('click',e=>{
-  if(!membersPanel.contains(e.target)&&e.target!==membersToggle){
-    membersPanel.classList.remove('open');
-  }
-});
+membersToggle.addEventListener('click',e=>{ e.stopPropagation(); membersPanel.classList.toggle('open'); });
+document.addEventListener('click',e=>{ if(!membersPanel.contains(e.target)&&e.target!==membersToggle) membersPanel.classList.remove('open'); });
 
 // ── パスワード表示切替 ──
 const pwIn=document.getElementById('pwIn');
@@ -341,36 +380,68 @@ function enter(){
   const nick=document.getElementById('nickIn').value.trim();
   if(pw!=='arpeggio'){ document.getElementById('errMsg').textContent='// INVALID PASSWORD'; pwIn.value=''; return; }
   myName=nick||randId();
+
+  // 名前を保存
+  localStorage.setItem(SAVED_KEY, myName);
+
   document.getElementById('pw').classList.remove('on');
   document.getElementById('main').classList.add('on');
   document.getElementById('dot').style.display='block';
   document.getElementById('meBadge').textContent=myName;
   document.getElementById('meBadge').style.display='block';
 
-  addChat('','ARPEGGIOに接続しました。',false,true);
-  addChat('','あなたのIDは '+myName+' です。',false,true);
+  addChat('','ARPEGGIOに接続しました。',false,true,null);
+  addChat('','あなたのIDは '+myName+' です。',false,true,null);
 
   // presence
   const pr=ref(db,'presence/'+myName+'_'+Date.now());
-  set(pr,{name:myName}); onDisconnect(pr).remove();
+  set(pr,{name:myName});
+  onDisconnect(pr).remove();
   onValue(ref(db,'presence'),snap=>updateMembers(snap));
 
-  // chat
+  // chat（差分更新）
+  let rendered=new Set();
   onValue(ref(db,'messages'),snap=>{
     if(!snap.exists()) return;
-    document.getElementById('chatMsgs').innerHTML='';
-    addChat('','ARPEGGIOに接続しました。',false,true);
-    addChat('','あなたのIDは '+myName+' です。',false,true);
-    snap.forEach(c=>{ const d=c.val(); addChat(d.name,d.text,d.name===myName,false); });
+    snap.forEach(c=>{
+      if(rendered.has(c.key)) return;
+      rendered.add(c.key);
+      const d=c.val();
+      addChat(d.name,d.text,d.name===myName,false,d.ts);
+    });
   });
 
-  // bbs
+  // bbs（差分更新でバグ修正）
+  let bbsRendered=new Set();
   onValue(ref(db,'posts'),snap=>{
     const container=document.getElementById('bbsPosts');
-    container.innerHTML='';
-    if(!snap.exists()){ const e=document.createElement('div'); e.style.cssText='color:#1e3e1e;font-size:11px;letter-spacing:2px;padding:20px;text-align:center'; e.textContent='// NO POSTS YET'; container.appendChild(e); return; }
-    const posts=[]; snap.forEach(c=>posts.push(c.val()));
-    posts.reverse().forEach(p=>container.appendChild(renderPost(p)));
+    if(!snap.exists()){
+      if(bbsRendered.size===0){
+        container.innerHTML='';
+        const e=document.createElement('div');
+        e.style.cssText='color:#1e3e1e;font-size:11px;letter-spacing:2px;padding:20px;text-align:center';
+        e.textContent='// NO POSTS YET';
+        container.appendChild(e);
+      }
+      return;
+    }
+    // 初回はまとめて上から描画
+    if(bbsRendered.size===0){
+      container.innerHTML='';
+      const posts=[];
+      snap.forEach(c=>posts.push({key:c.key,val:c.val()}));
+      posts.reverse().forEach(p=>{
+        bbsRendered.add(p.key);
+        container.appendChild(renderPost(p.val));
+      });
+    } else {
+      // 2件目以降は新規分だけ先頭に追加
+      snap.forEach(c=>{
+        if(bbsRendered.has(c.key)) return;
+        bbsRendered.add(c.key);
+        container.insertBefore(renderPost(c.val()), container.firstChild);
+      });
+    }
   });
 
   document.getElementById('chatIn').addEventListener('focus',()=>{
@@ -396,12 +467,14 @@ document.getElementById('chatIn').addEventListener('keydown',e=>{ if(e.key==='En
 function sendPost(){
   const titleEl=document.getElementById('postTitle');
   const bodyEl=document.getElementById('postBody');
-  const title=titleEl.value.trim(); if(!title) return;
+  const title=titleEl.value.trim();
+  if(!title) return;
   const body=bodyEl.value.trim();
   const now=new Date();
   const dateStr=now.getFullYear()+'/'+(now.getMonth()+1).toString().padStart(2,'0')+'/'+now.getDate().toString().padStart(2,'0')+' '+String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
   push(ref(db,'posts'),{author:myName,title,body,dateStr,ts:serverTimestamp()});
-  titleEl.value=''; bodyEl.value='';
+  titleEl.value='';
+  bodyEl.value='';
 }
 document.getElementById('postBtn').addEventListener('click',sendPost);
 document.getElementById('postBody').addEventListener('keydown',e=>{ if(e.key==='Enter'&&e.ctrlKey) sendPost(); });
