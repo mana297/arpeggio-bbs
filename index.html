@@ -295,9 +295,12 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, push, onValue, serverTimestamp, onDisconnect, set, remove, runTransaction }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { getAuth, signInAnonymously }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 const cfg={apiKey:"AIzaSyCZKSGamG9fW93bYbRcoIPYEFIx7wrDLsE",authDomain:"arpeggio-bbs.firebaseapp.com",databaseURL:"https://arpeggio-bbs-default-rtdb.firebaseio.com",projectId:"arpeggio-bbs",storageBucket:"arpeggio-bbs.firebasestorage.app",messagingSenderId:"155564356931",appId:"1:155564356931:web:b2b82d9ff90d19a6a22bf6"};
 const db=getDatabase(initializeApp(cfg));
+const auth=getAuth();
 const USER_PW='arpeggio',ADMIN_PW='izaya',SPAM_MS=3000;
 const adj=['Silent','Shadow','Phantom','Hollow','Neon','Crimson','Azure','Void','Static','Binary'];
 const noun=['Walker','Ghost','Drifter','Signal','Echo','Cipher','Specter','Node','Relay','Pulse'];
@@ -518,6 +521,21 @@ function enter(){
   if(pw===ADMIN_PW){isAdmin=true;}else if(pw===USER_PW){isAdmin=false;}else{document.getElementById('errMsg').textContent='// INVALID PASSWORD';pwIn.value='';return;}
   myName=nick||randId();
   localStorage.setItem(SAVED_KEY,myName);
+
+  // Firebase匿名認証してからチャット開始
+  document.getElementById('enterBtn').textContent='[ CONNECTING... ]';
+  document.getElementById('enterBtn').disabled=true;
+
+  signInAnonymously(auth).then(()=>{
+    startChat();
+  }).catch(err=>{
+    document.getElementById('errMsg').textContent='// CONNECTION ERROR: '+err.code;
+    document.getElementById('enterBtn').textContent='[ ENTER ]';
+    document.getElementById('enterBtn').disabled=false;
+  });
+}
+
+function startChat(){
   document.getElementById('pw').classList.remove('on');
   document.getElementById('main').classList.add('on');
   document.getElementById('dot').style.display='block';
