@@ -79,7 +79,7 @@
     .msg-body.cmd{color:#5a8a5a;font-size:12px;font-style:italic}
     .del-msg-btn{position:absolute;right:2px;top:2px;background:#1a0808;border:1px solid #3a1a1a;color:#8a4a4a;font-family:'Share Tech Mono',monospace;font-size:10px;padding:1px 6px;cursor:pointer;display:none;transition:all .15s}
     .del-msg-btn:hover{color:#cc6666}
-    .msg:hover .del-msg-btn.visible{display:block}
+    .msg:hover .del-msg-btn{display:block}
     .msg.muted{opacity:0.25}
     .date-sep{display:flex;align-items:center;gap:10px;padding:6px 0;margin:4px 0}
     .date-sep-line{flex:1;border-top:1px solid #1a2a1a}
@@ -103,7 +103,7 @@
     .post-body{font-size:12px;color:#5a8a5a;line-height:1.6;word-break:break-word}
     .del-post-btn{position:absolute;right:8px;top:8px;background:#1a0808;border:1px solid #3a1a1a;color:#8a4a4a;font-family:'Share Tech Mono',monospace;font-size:10px;padding:2px 7px;cursor:pointer;display:none;transition:all .15s}
     .del-post-btn:hover{color:#cc6666}
-    .post-card:hover .del-post-btn.visible{display:block}
+    .post-card:hover .del-post-btn{display:block}
     .bbs-form{border-top:1px solid #1a2e1a;padding:10px 14px;background:#060b06;display:flex;flex-direction:column;gap:7px;flex-shrink:0}
     .bbs-ti{width:100%;background:#0a120a;border:1px solid #1a3a1a;color:#8ab88a;font-size:12px;padding:7px 11px}
     .bbs-ti:focus{border-color:#3a6a3a}
@@ -112,7 +112,6 @@
     .bbs-bi:focus{border-color:#3a6a3a}
     .btn-post{background:transparent;border:1px solid #2a5a2a;color:#6dbd6d;font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:1px;padding:8px 14px;cursor:pointer;flex-shrink:0;align-self:flex-end;transition:all .15s}
     .btn-post:hover{background:#0d1a0d}
-    /* 管理者パネル */
     .admin-fab{display:none;position:fixed;bottom:16px;right:16px;background:#120808;border:1px solid #4a1a1a;color:#8a4a4a;font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;padding:8px 14px;cursor:pointer;z-index:301;transition:all .2s}
     .admin-fab:hover,.admin-fab.on{background:#1a0808;color:#cc6666;border-color:#6a2a2a}
     .admin-panel{display:none;position:fixed;bottom:56px;right:16px;width:240px;background:#0a0d0a;border:1px solid #3a1a1a;z-index:300;flex-direction:column;box-shadow:0 0 20px rgba(180,60,60,0.12)}
@@ -186,7 +185,7 @@
       <div class="pane on" id="chat">
         <div class="chat-msgs" id="chatMsgs"></div>
         <div class="chat-bar">
-          <input class="ci" type="text" id="chatIn" placeholder="メッセージを入力... ( / でコマンド)" maxlength="200"/>
+          <input class="ci" type="text" id="chatIn" placeholder="メッセージを入力... ( / でコマンド)" maxlength="200" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
           <button class="btn-send" id="sendBtn">SEND</button>
         </div>
       </div>
@@ -208,7 +207,6 @@
   </div>
 </div>
 
-<!-- 管理者UI -->
 <button class="admin-fab" id="adminFab">// OBSERVER</button>
 <div class="admin-panel" id="adminPanel">
   <div class="admin-phdr">
@@ -226,7 +224,7 @@
     <button class="admin-btn" id="adminScrollLatest">↓ 最新メッセージへ</button>
     <button class="admin-btn" id="adminClearMutes">MUTE をすべて解除</button>
     <hr class="admin-divider"/>
-    <div class="admin-hint">メッセージ・投稿にカーソルを当てると DEL ボタンが表示されます。メンバーリストで MUTE / UNMUTE が使えます。</div>
+    <div class="admin-hint">メッセージ・投稿にカーソルを当てると DEL が表示されます。メンバーリストで MUTE / UNMUTE が使えます。</div>
   </div>
 </div>
 
@@ -246,14 +244,28 @@ function avText(n){return n?n.slice(0,2).toUpperCase():'SY';}
 function fmt(ts){const d=ts?new Date(ts):new Date();return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');}
 function dateLabel(ts){const d=ts?new Date(ts):new Date();return d.getFullYear()+'/'+(d.getMonth()+1).toString().padStart(2,'0')+'/'+d.getDate().toString().padStart(2,'0');}
 
+// ── スラッシュ判定（iOS対応）──
+// iOSはIMEや自動補正で半角スラッシュが全角や別文字になることがある
+// normalize後にASCIIスラッシュに統一して判定する
+function normalizeSlash(s){
+  // 全角スラッシュ／をASCIIスラッシュに変換、前後の空白を除去
+  return s.replace(/／/g,'/').trim();
+}
+function isCommand(s){
+  const n=normalizeSlash(s);
+  return n.startsWith('/');
+}
+
 let myName='',isAdmin=false,mutedUsers=new Set(),lastSent=0,totalMsgs=0,totalPosts=0;
+// presenceのキーをsessionStorageで固定（タブ切替でキーが変わらないようにする）
+let presenceKey=sessionStorage.getItem('arpeggio_pkey');
+if(!presenceKey){presenceKey='p_'+Math.random().toString(36).slice(2);sessionStorage.setItem('arpeggio_pkey',presenceKey);}
 
 const SAVED_KEY='arpeggio_nickname';
 const sn=localStorage.getItem(SAVED_KEY);
 if(sn){document.getElementById('nickIn').value=sn;document.getElementById('savedHint').textContent='// 前回の名前: '+sn;}
 
 function mkAv(n,cls='avatar'){const el=document.createElement('div');el.className=cls+' '+avClass(n);el.textContent=avText(n);return el;}
-
 function updateAdminStats(){
   document.getElementById('sOnline').textContent=document.getElementById('onlineBadge').textContent;
   document.getElementById('sMsgs').textContent=totalMsgs;
@@ -261,7 +273,6 @@ function updateAdminStats(){
   document.getElementById('sMuted').textContent=mutedUsers.size;
 }
 
-// ── チャット描画 ──
 let lastDL='';
 function addChat(name,text,isMe,isSys,ts,key,isCmd){
   const msgs=document.getElementById('chatMsgs');
@@ -288,18 +299,17 @@ function addChat(name,text,isMe,isSys,ts,key,isCmd){
   meta.appendChild(top);meta.appendChild(bd);
   row.appendChild(av);row.appendChild(meta);
   if(isAdmin&&key&&!isSys){
-    const btn=document.createElement('button');btn.className='del-msg-btn visible';btn.textContent='DEL';
-    btn.onclick=()=>{if(confirm('このメッセージを削除しますか？'))remove(ref(db,'messages/'+key));};
+    const btn=document.createElement('button');btn.className='del-msg-btn';btn.textContent='DEL';
+    btn.onclick=()=>{if(confirm('削除しますか？'))remove(ref(db,'messages/'+key));};
     row.appendChild(btn);
   }
-  msgs.appendChild(row);
-  msgs.scrollTop=msgs.scrollHeight;
+  msgs.appendChild(row);msgs.scrollTop=msgs.scrollHeight;
 }
 function addNotice(t){const msgs=document.getElementById('chatMsgs');const el=document.createElement('div');el.className='notice';el.textContent=t;msgs.appendChild(el);msgs.scrollTop=msgs.scrollHeight;}
 function addSpamWarn(){const msgs=document.getElementById('chatMsgs');const el=document.createElement('div');el.className='spam-warn';el.textContent='// 送信が早すぎます。';msgs.appendChild(el);msgs.scrollTop=msgs.scrollHeight;setTimeout(()=>el.remove(),2500);}
 
-// ── コマンド ──
-function handleCmd(text){
+function handleCmd(raw){
+  const text=normalizeSlash(raw);
   const parts=text.trim().split(/\s+/),cmd=parts[0].toLowerCase(),args=parts.slice(1).join(' ');
   const say=(t)=>addChat('',t,false,false,null,null,true);
   if(cmd==='/help'){say('[ HELP ] /members /me /clear /coin /8ball [質問]');}
@@ -311,7 +321,6 @@ function handleCmd(text){
   else{say('[ ERROR ] 不明なコマンド。/help で一覧を確認。');}
 }
 
-// ── 掲示板（全件再描画でバグ解消） ──
 function renderAllPosts(snap){
   const c=document.getElementById('bbsPosts');c.innerHTML='';
   if(!snap||!snap.exists()){const e=document.createElement('div');e.style.cssText='color:#1e3e1e;font-size:11px;letter-spacing:2px;padding:20px;text-align:center';e.textContent='// NO POSTS YET';c.appendChild(e);totalPosts=0;updateAdminStats();return;}
@@ -329,12 +338,11 @@ function renderAllPosts(snap){
     const title=document.createElement('div');title.className='post-title';title.textContent=p.val.title||'';
     card.appendChild(hdr);card.appendChild(title);
     if(p.val.body){const b=document.createElement('div');b.className='post-body';b.textContent=p.val.body;card.appendChild(b);}
-    if(isAdmin){const btn=document.createElement('button');btn.className='del-post-btn visible';btn.textContent='DEL';btn.onclick=()=>{if(confirm('この投稿を削除しますか？'))remove(ref(db,'posts/'+p.key));};card.appendChild(btn);}
+    if(isAdmin){const btn=document.createElement('button');btn.className='del-post-btn';btn.textContent='DEL';btn.onclick=()=>{if(confirm('削除しますか？'))remove(ref(db,'posts/'+p.key));};card.appendChild(btn);}
     c.appendChild(card);
   });
 }
 
-// ── メンバーリスト ──
 let prevMembers={};
 function updateMembers(snap){
   const list=document.getElementById('membersList');list.innerHTML='';
@@ -356,8 +364,7 @@ function updateMembers(snap){
     const dot=document.createElement('div');dot.className='member-dot';
     row.appendChild(av);row.appendChild(nm);row.appendChild(dot);
     if(isAdmin&&!isMe){
-      const btn=document.createElement('button');
-      const muted=mutedUsers.has(name);
+      const btn=document.createElement('button');const muted=mutedUsers.has(name);
       btn.className='mute-btn'+(muted?' active':'');btn.textContent=muted?'UNMUTE':'MUTE';
       btn.onclick=()=>{
         if(mutedUsers.has(name)){mutedUsers.delete(name);}else{mutedUsers.add(name);}
@@ -373,22 +380,17 @@ function updateMembers(snap){
 
 // タブ
 document.querySelectorAll('.tab').forEach(t=>{t.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.pane').forEach(x=>x.classList.remove('on'));t.classList.add('active');document.getElementById(t.dataset.pane).classList.add('on');});});
-// スマホ
 const mToggle=document.getElementById('membersToggle'),mPanel=document.getElementById('membersPanel');
 mToggle.addEventListener('click',e=>{e.stopPropagation();mPanel.classList.toggle('open');});
 document.addEventListener('click',e=>{if(!mPanel.contains(e.target)&&e.target!==mToggle)mPanel.classList.remove('open');});
-// pw表示
 const pwIn=document.getElementById('pwIn');
 document.getElementById('eyeBtn').addEventListener('click',()=>{const h=pwIn.type==='password';pwIn.type=h?'text':'password';document.getElementById('eyeBtn').textContent=h?'HIDE':'SHOW';});
-
-// 管理者パネルUI
 const adminFab=document.getElementById('adminFab'),adminPanel=document.getElementById('adminPanel');
 adminFab.addEventListener('click',()=>{adminPanel.classList.toggle('on');adminFab.classList.toggle('on');updateAdminStats();});
 document.getElementById('adminClose').addEventListener('click',()=>{adminPanel.classList.remove('on');adminFab.classList.remove('on');});
 document.getElementById('adminScrollLatest').addEventListener('click',()=>{const msgs=document.getElementById('chatMsgs');msgs.scrollTop=msgs.scrollHeight;});
-document.getElementById('adminClearMutes').addEventListener('click',()=>{mutedUsers.clear();document.querySelectorAll('.msg.muted').forEach(m=>m.classList.remove('muted'));updateAdminStats();if(myName)updateMembers({exists:()=>true,val:()=>prevMembers,forEach:(cb)=>Object.entries(prevMembers).forEach(([k,v])=>cb({key:k,val:()=>v}))});addChat('','[ OBSERVER ] すべてのMUTEを解除しました。',false,false,null,null,true);});
+document.getElementById('adminClearMutes').addEventListener('click',()=>{mutedUsers.clear();document.querySelectorAll('.msg.muted').forEach(m=>m.classList.remove('muted'));updateAdminStats();addChat('','[ OBSERVER ] すべてのMUTEを解除しました。',false,false,null,null,true);});
 
-// ── 入室 ──
 function enter(){
   const pw=pwIn.value.trim().toLowerCase(),nick=document.getElementById('nickIn').value.trim();
   if(pw===ADMIN_PW){isAdmin=true;}
@@ -408,48 +410,50 @@ function enter(){
   addChat('','/ を入力するとコマンドが使えます。',false,true,null,null,false);
   if(isAdmin)addChat('','[ OBSERVER MODE ] 右下のボタンで管理パネルを開けます。',false,true,null,null,false);
 
-  const pr=ref(db,'presence/'+myName+'_'+Date.now());
-  set(pr,{name:myName});onDisconnect(pr).remove();
+  // ── presence（再接続対応）──
+  // .info/connected を監視して、接続が復帰するたびにpresenceを再登録する
+  // これによりタブ切り替え・スリープ後のpresence消滅を防ぐ
+  const prRef=ref(db,'presence/'+presenceKey);
+  onValue(ref(db,'.info/connected'),snap=>{
+    if(snap.val()===true){
+      // 接続（再接続）したらpresenceを再セット
+      set(prRef,{name:myName});
+      onDisconnect(prRef).remove();
+    }
+  });
+
   onValue(ref(db,'presence'),snap=>updateMembers(snap));
 
   let rendered=new Set();
   onValue(ref(db,'messages'),snap=>{
     if(!snap.exists())return;
     totalMsgs=0;
-    snap.forEach(c=>{
-      totalMsgs++;
-      if(rendered.has(c.key))return;
-      rendered.add(c.key);
-      const d=c.val();addChat(d.name,d.text,d.name===myName,false,d.ts,c.key,false);
-    });
-    // 削除されたメッセージをDOMから消す
+    snap.forEach(c=>{totalMsgs++;if(rendered.has(c.key))return;rendered.add(c.key);const d=c.val();addChat(d.name,d.text,d.name===myName,false,d.ts,c.key,false);});
     document.querySelectorAll('.msg[data-key]').forEach(el=>{if(!snap.child(el.dataset.key).exists())el.remove();});
     updateAdminStats();
   });
-
-  // bbs全件再描画（バグ修正）
   onValue(ref(db,'posts'),snap=>renderAllPosts(snap));
-
   document.getElementById('chatIn').addEventListener('focus',()=>{setTimeout(()=>{document.getElementById('chatMsgs').scrollTop=document.getElementById('chatMsgs').scrollHeight;},300);});
 }
 document.getElementById('enterBtn').addEventListener('click',enter);
 pwIn.addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('nickIn').focus();});
 document.getElementById('nickIn').addEventListener('keydown',e=>{if(e.key==='Enter')enter();});
 
-// ── チャット送信 ──
 function sendChat(){
-  const el=document.getElementById('chatIn'),text=el.value.trim();if(!text)return;
-  if(text.startsWith('/')){el.value='';handleCmd(text);return;}
+  const el=document.getElementById('chatIn');
+  const raw=el.value;
+  const text=normalizeSlash(raw).trim();
+  if(!text)return;
+  el.value='';
+  if(isCommand(raw)){handleCmd(text);return;}
   const now=Date.now();
   if(!isAdmin&&now-lastSent<SPAM_MS){addSpamWarn();return;}
   lastSent=now;
   push(ref(db,'messages'),{name:myName,text,ts:serverTimestamp()});
-  el.value='';
 }
 document.getElementById('sendBtn').addEventListener('click',sendChat);
 document.getElementById('chatIn').addEventListener('keydown',e=>{if(e.key==='Enter')sendChat();});
 
-// ── 掲示板投稿 ──
 function sendPost(){
   const tEl=document.getElementById('postTitle'),bEl=document.getElementById('postBody');
   const title=tEl.value.trim();if(!title)return;
