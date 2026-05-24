@@ -84,6 +84,17 @@
 
 ---
 
+## v1.1 — モダンSNS機能追加フェーズ
+
+### FEAT-011: ステータスタグ（気分・状態のワンタップ共有）
+- **実装バージョン**: v1.1.1
+- **実装日**: 2026-05-24
+- **種別**: 新機能
+- **実装内容**: ユーザーが自分の状態を 16 種類のタグから選んで共有できる機能。ヘッダーの `STATUS` ボタンからモーダルを開き、絵文字タグを選択すると Firebase `presence/{key}.status` に書き込まれ、メンバーリストの名前横にリアルタイム反映される。ページ再接続時も `.info/connected` リスナー経由で状態を維持。`✖クリア` で解除。
+- **関連コード**: `STATUS_TAGS`、`myStatus`、`#statusModal`、`#statusGrid`、`.status-chip`、`.status-dot`、`updateMembers()` 内の status 表示ロジック
+
+---
+
 ## v1.0 — 基盤完成（DEV_WORKFLOW 導入・ドキュメント整備）
 
 ### FEAT-010: 開発ドキュメント整備・DEV_WORKFLOW 導入
