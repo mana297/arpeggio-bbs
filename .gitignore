@@ -1,0 +1,5 @@
+backup/
+*.log
+.env
+config.json
+secrets.*
